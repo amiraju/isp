@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>AccessTEL | ISP Profit/Loss Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #e8f0f8 0%, #d4e2f5 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    .container {
+      max-width: 880px;
+      width: 100%;
+      background: white;
+      border-radius: 2.2rem;
+      box-shadow: 0 25px 55px rgba(0, 20, 50, 0.18);
+      padding: 2rem 2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .brand-area {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .brand-name {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #0b2b44;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #0b2b44, #1a4a6e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-tagline {
+      font-size: 0.8rem;
+      color: #4b6a84;
+      font-weight: 500;
+      margin-left: 0.2rem;
+    }
+    .badge {
+      background: #1d4b6e;
+      color: white;
+      font-size: 0.8rem;
+      padding: 0.25rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+    }
+    .subtitle {
+      color: #4b6079;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 0.3rem;
+      border-bottom: 1px solid #e2eaf3;
+      padding-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+    .input-panel {
+      background: #f5f9ff;
+      border-radius: 1.5rem;
+      padding: 1.6rem;
+      border: 1px solid #dce6f2;
+      margin-bottom: 1.8rem;
+    }
+    .user-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .user-input-group {
+      flex: 2;
+      min-width: 200px;
+    }
+    .user-input-group label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1d3a55;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .user-input-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border: 2px solid #cdddec;
+      border-radius: 2rem;
+      outline: none;
+      background: white;
+      transition: 0.2s;
+    }
+    .user-input-group input:focus {
+      border-color: #1f5f8b;
+      box-shadow: 0 0 0 3px rgba(31,95,139,0.2);
+    }
+    .price-per-user-box {
+      flex: 1;
+      min-width: 170px;
+      background: white;
+      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #d4e2f2;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .price-per-user-box label {
+      font-weight: 700;
+      color: #1d3a55;
+      font-size: 0.85rem;
+    }
+    .price-per-user-box input {
+      width: 90px;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      background: transparent;
+      outline: none;
+      color: #0b2b44;
+    }
+    .selectors {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    select {
+      padding: 0.55rem 2rem 0.55rem 1rem;
+      border-radius: 2rem;
+      border: 1px solid #cbddec;
+      font-weight: 600;
+      background: white;
+      color: #0b2f4a;
+      outline: none;
+      cursor: pointer;
+    }
+    .mbps-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin: 1.2rem 0 0.8rem;
+      background: #ffffff;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      justify-content: space-between;
+    }
+    .mbps-item {
+      text-align: center;
+      flex: 1 1 70px;
+    }
+    .mbps-item .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #3a5670;
+      text-transform: uppercase;
+    }
+    .mbps-item .value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0a2c44;
+    }
+    .mbps-item .small {
+      font-size: 0.65rem;
+      color: #5a6f84;
+    }
+    .cost-profit-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .card {
+      background: #f8fafd;
+      border-radius: 1.4rem;
+      padding: 1.2rem 1.3rem;
+      flex: 1 1 270px;
+      border: 1px solid #e2eaf3;
+    }
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f314b;
+      margin-bottom: 1rem;
+      border-left: 4px solid #1e5a8a;
+      padding-left: 0.7rem;
+    }
+    .cost-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 0.45rem;
+      color: #1e3b55;
+    }
+    .cost-line.total {
+      font-weight: 800;
+      border-top: 1px dashed #c2d4e8;
+      padding-top: 0.5rem;
+      margin-top: 0.4rem;
+      font-size: 1rem;
+    }
+    .profit-box {
+      background: #e5f0fa;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .profit-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .positive {
+      color: #0f5c3b;
+    }
+    .negative {
+      color: #b13e3e;
+    }
+    .big-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+    .auto-update {
+      font-size: 0.7rem;
+      color: #5b6e82;
+      margin-top: 0.5rem;
+      text-align: right;
+      font-style: italic;
+    }
+    .footer-note {
+      font-size: 0.7rem;
+      color: #5b6e82;
+      margin-top: 0.8rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .copyright {
+      font-size: 0.7rem;
+      color: #7a8b9e;
+      text-align: center;
+      margin-top: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    hr {
+      border: 0.5px solid #dce4ee;
+      margin: 0.8rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand-area">
+      <span class="brand-name">AccessTEL</span>
+      <span class="brand-tagline">ISP Profit/Loss Calculator</span>
+    </div>
+    <span class="badge">BDT / month</span>
+  </div>
+  <div class="subtitle">
+    <span>🌐 Automatic bandwidth calculation from users</span>
+    <span style="font-weight:600;">📡 NTTN slab pricing</span>
+  </div>
+
+  <div class="input-panel">
+    <div class="user-row">
+      <div class="user-input-group">
+        <label>👥 Number of Users</label>
+        <input type="number" id="userCount" value="100" min="0" step="1">
+      </div>
+      <div class="price-per-user-box">
+        <label>💰 Price/User:</label>
+        <input type="number" id="pricePerUser" value="250" min="0" step="1">
+        <span style="font-weight:600;">/-</span>
+      </div>
+    </div>
+    <div class="selectors">
+      <select id="nttnType">
+        <option value="SCL" selected>NTTN: SCL</option>
+        <option value="FAH">NTTN: F@H</option>
+      </select>
+      <select id="linkType">
+        <option value="LH" selected>LH (Long Haul)</option>
+        <option value="D2D">D2D</option>
+      </select>
+    </div>
+
+    <div class="mbps-grid" id="mbpsDisplay">
+      <div class="mbps-item"><div class="label">IIG</div><div class="value" id="iigMbps">0</div><div class="small">0.4/u</div></div>
+      <div class="mbps-item"><div class="label">GGC</div><div class="value" id="ggcMbps">0</div><div class="small">1.1/u</div></div>
+      <div class="mbps-item"><div class="label">FNA</div><div class="value" id="fnaMbps">0</div><div class="small">0.9/u</div></div>
+      <div class="mbps-item"><div class="label">CDN</div><div class="value" id="cdnMbps">0</div><div class="small">0.3/u</div></div>
+      <div class="mbps-item"><div class="label">BDIX</div><div class="value" id="bdixMbps">0</div><div class="small">0.1/u</div></div>
+      <div class="mbps-item"><div class="label">NTTN</div><div class="value" id="nttnMbps">0</div><div class="small" id="nttnPerUserLabel">3.0/u</div></div>
+    </div>
+    <div class="auto-update">⚡ Real-time calculation</div>
+  </div>
+
+  <div class="cost-profit-grid">
+    <div class="card">
+      <h3>📦 COST BREAKDOWN</h3>
+      <div class="cost-line"><span>IIG</span> <strong id="iigCostLine">0</strong></div>
+      <div class="cost-line"><span>GGC</span> <strong id="ggcCostLine">0</strong></div>
+      <div class="cost-line"><span>FNA</span> <strong id="fnaCostLine">0</strong></div>
+      <div class="cost-line"><span>CDN</span> <strong id="cdnCostLine">0</strong></div>
+      <div class="cost-line"><span>NTTN</span> <strong id="nttnCostLine">0</strong></div>
+      <div class="cost-line total"><span>TOTAL COST</span> <strong id="totalCostLine">0</strong></div>
+      <div class="small-note" style="font-size:0.7rem; color:#4f6579; margin-top:0.4rem;" id="nttnDetail"></div>
+    </div>
+    <div class="card">
+      <h3>💵 REVENUE & PROFIT</h3>
+      <div class="cost-line"><span>👥 Users</span> <strong id="userCountDisplay">0</strong></div>
+      <div class="cost-line"><span>💰 Price per user</span> <strong id="pricePerUserDisplay">250</strong></div>
+      <div class="cost-line total"><span>📊 TOTAL REVENUE</span> <strong id="totalRevenue">0</strong></div>
+      <div class="profit-box">
+        <div class="profit-row">
+          <span>📈 PROFIT / LOSS</span>
+          <span class="big-number" id="profitLoss">0</span>
+        </div>
+        <div class="profit-row" style="font-size:0.9rem; margin-top:0.3rem;">
+          <span>Per user profit</span>
+          <span id="perUserProfit">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-note">
+    <span>🔹 AccessTEL</span> · 
+    <span>IIG 0.4 · GGC 1.1 · FNA 0.9 · CDN 0.3 · BDIX 0.1 Mbps/user</span> · 
+    <span>NTTN: 3 Mbps/user (1-1500)</span>
+  </div>
+  <div class="copyright">© Copyright by Raju. All rights reserved.</div>
+</div>
+
+<script>
+  (function() {
+    const RATE = { IIG: 157.5, GGC: 18, FNA: 18, CDN: 50, BDIX: 0 };
+    const USAGE = { IIG: 0.4, GGC: 1.1, FNA: 0.9, CDN: 0.3, BDIX: 0.1 };
+
+    const sclLH = [
+      { min: 11, max: 11, price: 1155 }, { min: 12, max: 50, price: 100 },
+      { min: 51, max: 100, price: 72 }, { min: 101, max: 200, price: 63 },
+      { min: 201, max: 300, price: 45 }, { min: 301, max: 499, price: 32 },
+      { min: 500, max: 999, price: 30 }, { min: 1000, max: 1999, price: 29 },
+      { min: 2000, max: 4999, price: 28 }, { min: 5000, max: 9999, price: 27 }
+    ];
+    const sclD2D = [
+      { min: 11, max: 11, price: 1045 }, { min: 12, max: 50, price: 85 },
+      { min: 51, max: 100, price: 70 }, { min: 101, max: 200, price: 45 },
+      { min: 201, max: 300, price: 25 }, { min: 301, max: 499, price: 22 },
+      { min: 500, max: 999, price: 20 }, { min: 1000, max: 1999, price: 17 },
+      { min: 2000, max: 4999, price: 16 }, { min: 5000, max: 9999, price: 15 }
+    ];
+    const fahLH = [
+      { min: 11, max: 11, price: 1650 }, { min: 12, max: 49, price: 130 },
+      { min: 50, max: 99, price: 100 }, { min: 100, max: 299, price: 60 },
+      { min: 300, max: 499, price: 38 }, { min: 500, max: 999, price: 33 },
+      { min: 1000, max: 1999, price: 28 }, { min: 2000, max: 4999, price: 28 },
+      { min: 5000, max: 9999, price: 28 }
+    ];
+    const fahD2D = [
+      { min: 11, max: 11, price: 1600 }, { min: 12, max: 49, price: 100 },
+      { min: 50, max: 99, price: 90 }, { min: 100, max: 299, price: 40 },
+      { min: 300, max: 499, price: 25 }, { min: 500, max: 999, price: 20 },
+      { min: 1000, max: 1999, price: 18 }, { min: 2000, max: 4999, price: 16 },
+      { min: 5000, max: 9999, price: 16 }
+    ];
+
+    const userInput = document.getElementById('userCount');
+    const pricePerUserInput = document.getElementById('pricePerUser');
+    const nttnTypeSelect = document.getElementById('nttnType');
+    const linkTypeSelect = document.getElementById('linkType');
+
+    const iigMbpsSpan = document.getElementById('iigMbps');
+    const ggcMbpsSpan = document.getElementById('ggcMbps');
+    const fnaMbpsSpan = document.getElementById('fnaMbps');
+    const cdnMbpsSpan = document.getElementById('cdnMbps');
+    const bdixMbpsSpan = document.getElementById('bdixMbps');
+    const nttnMbpsSpan = document.getElementById('nttnMbps');
+    const nttnPerUserLabel = document.getElementById('nttnPerUserLabel');
+
+    const iigCostLine = document.getElementById('iigCostLine');
+    const ggcCostLine = document.getElementById('ggcCostLine');
+    const fnaCostLine = document.getElementById('fnaCostLine');
+    const cdnCostLine = document.getElementById('cdnCostLine');
+    const nttnCostLine = document.getElementById('nttnCostLine');
+    const totalCostLine = document.getElementById('totalCostLine');
+    const nttnDetail = document.getElementById('nttnDetail');
+
+    const userCountDisplay = document.getElementById('userCountDisplay');
+    const pricePerUserDisplay = document.getElementById('pricePerUserDisplay');
+    const totalRevenueSpan = document.getElementById('totalRevenue');
+    const profitLossSpan = document.getElementById('profitLoss');
+    const perUserProfitSpan = document.getElementById('perUserProfit');
+
+    function getPerUserNttn(users) {
+      if (users <= 0) return 0;
+      return 3.0;
+    }
+
+    function getNttnPrice(nttn, link, mbps) {
+      if (mbps <= 0) return 0;
+      let slab;
+      if (nttn === 'SCL') slab = link === 'LH' ? sclLH : sclD2D;
+      else slab = link === 'LH' ? fahLH : fahD2D;
+      for (let s of slab) {
+        if (mbps >= s.min && mbps <= s.max) return s.price;
+      }
+      const last = slab[slab.length-1];
+      if (mbps > last.max) return last.price;
+      return 0;
+    }
+
+    function updateAll() {
+      const users = parseFloat(userInput.value) || 0;
+      const pricePerUser = parseFloat(pricePerUserInput.value) || 0;
+      
+      const iig = users * USAGE.IIG;
+      const ggc = users * USAGE.GGC;
+      const fna = users * USAGE.FNA;
+      const cdn = users * USAGE.CDN;
+      const bdix = users * USAGE.BDIX;
+      const perUserNttn = getPerUserNttn(users);
+      const nttn = users * perUserNttn;
+      
+      iigMbpsSpan.textContent = iig.toFixed(2);
+      ggcMbpsSpan.textContent = ggc.toFixed(2);
+      fnaMbpsSpan.textContent = fna.toFixed(2);
+      cdnMbpsSpan.textContent = cdn.toFixed(2);
+      bdixMbpsSpan.textContent = bdix.toFixed(2);
+      nttnMbpsSpan.textContent = nttn.toFixed(2);
+      nttnPerUserLabel.textContent = perUserNttn.toFixed(2) + '/u';
+      
+      const iigCost = iig * RATE.IIG;
+      const ggcCost = ggc * RATE.GGC;
+      const fnaCost = fna * RATE.FNA;
+      const cdnCost = cdn * RATE.CDN;
+      const nttnType = nttnTypeSelect.value;
+      const link = linkTypeSelect.value;
+      const nttnPrice = getNttnPrice(nttnType, link, nttn);
+      const nttnCost = nttn * nttnPrice;
+      const totalCost = iigCost + ggcCost + fnaCost + cdnCost + nttnCost;
+      
+      iigCostLine.textContent = iigCost.toFixed(2) + ' /-';
+      ggcCostLine.textContent = ggcCost.toFixed(2) + ' /-';
+      fnaCostLine.textContent = fnaCost.toFixed(2) + ' /-';
+      cdnCostLine.textContent = cdnCost.toFixed(2) + ' /-';
+      nttnCostLine.textContent = nttnCost.toFixed(2) + ' /-';
+      totalCostLine.textContent = totalCost.toFixed(2) + ' /-';
+      
+      nttnDetail.innerHTML = `${nttnType} ${link} · ${nttn.toFixed(2)} Mbps @ ${nttnPrice.toFixed(2)} BDT/Mbps`;
+      
+      const totalRevenue = users * pricePerUser;
+      const profit = totalRevenue - totalCost;
+      const perUserProfitVal = users > 0 ? profit / users : 0;
+      
+      userCountDisplay.textContent = users;
+      pricePerUserDisplay.textContent = pricePerUser.toFixed(2) + ' /-';
+      totalRevenueSpan.textContent = totalRevenue.toFixed(2) + ' /-';
+      
+      profitLossSpan.textContent = profit.toFixed(2) + ' /-';
+      profitLossSpan.className = 'big-number ' + (profit >= 0 ? 'positive' : 'negative');
+      perUserProfitSpan.textContent = perUserProfitVal.toFixed(2) + ' /-';
+      perUserProfitSpan.className = perUserProfitVal >= 0 ? 'positive' : 'negative';
+    }
+
+    userInput.addEventListener('input', updateAll);
+    pricePerUserInput.addEventListener('input', updateAll);
+    nttnTypeSelect.addEventListener('change', updateAll);
+    linkTypeSelect.addEventListener('change', updateAll);
+
+    updateAll();
+  })();
+</script>
+</body>
+</html>
